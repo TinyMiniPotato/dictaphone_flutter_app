@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:record/record.dart';
 
@@ -6,6 +9,24 @@ class RecordScreen extends StatelessWidget {
   final record = Record();
 
   RecordScreen({super.key});
+
+  static Future<String> createFolderInAppDocDir(String folderName) async {
+    //Get this App Document Directory
+    final Directory _appDocDir = await getApplicationDocumentsDirectory();
+    //App Document Directory + folder name
+    final Directory _appDocDirFolder =
+        Directory('${_appDocDir.path}/$folderName/');
+
+    if (await _appDocDirFolder.exists()) {
+      //if folder already exists return path
+      return _appDocDirFolder.path;
+    } else {
+      //if folder not exists create folder and then return its path
+      final Directory _appDocDirNewFolder =
+          await _appDocDirFolder.create(recursive: true);
+      return _appDocDirNewFolder.path;
+    }
+  }
 
   Future<bool> startRecording() async {
     if (await record.isRecording()) {
@@ -16,8 +37,18 @@ class RecordScreen extends StatelessWidget {
     // Check and request permission
     if (await record.hasPermission()) {
       // Start recording
+      final String pathDir = await createFolderInAppDocDir('test');
+      Directory appFolder = Directory(pathDir);
+      bool appFolderExists = await appFolder.exists();
+      if (!appFolderExists) {
+        final created = await appFolder.create(recursive: true);
+        print(created.path);
+      }
+      final filepath = '${appFolder.path}bla.m4a';
+      print(filepath);
+
       await record.start(
-        path: 'test/myFile.m4a',
+        path: filepath,
         encoder: AudioEncoder.aacLc, // by default
       );
     }
@@ -25,7 +56,8 @@ class RecordScreen extends StatelessWidget {
   }
 
   Future<void> stopRecording() async {
-    await record.stop();
+    String? path = await record.stop();
+    print(path);
   }
 
   @override
