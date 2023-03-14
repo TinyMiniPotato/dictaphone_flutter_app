@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -12,19 +13,19 @@ class RecordScreen extends StatelessWidget {
 
   static Future<String> createFolderInAppDocDir(String folderName) async {
     //Get this App Document Directory
-    final Directory _appDocDir = await getApplicationDocumentsDirectory();
+    final Directory appDocDir = await getApplicationDocumentsDirectory();
     //App Document Directory + folder name
-    final Directory _appDocDirFolder =
-        Directory('${_appDocDir.path}/$folderName/');
+    final Directory appDocDirFolder =
+        Directory('${appDocDir.path}/$folderName/');
 
-    if (await _appDocDirFolder.exists()) {
+    if (await appDocDirFolder.exists()) {
       //if folder already exists return path
-      return _appDocDirFolder.path;
+      return appDocDirFolder.path;
     } else {
       //if folder not exists create folder and then return its path
-      final Directory _appDocDirNewFolder =
-          await _appDocDirFolder.create(recursive: true);
-      return _appDocDirNewFolder.path;
+      final Directory appDocDirNewFolder =
+          await appDocDirFolder.create(recursive: true);
+      return appDocDirNewFolder.path;
     }
   }
 
@@ -42,22 +43,28 @@ class RecordScreen extends StatelessWidget {
       bool appFolderExists = await appFolder.exists();
       if (!appFolderExists) {
         final created = await appFolder.create(recursive: true);
-        print(created.path);
+        if (kDebugMode) {
+          print(created.path);
+        }
       }
-      final filepath = '${appFolder.path}bla.m4a';
-      print(filepath);
+      final filepath = '${appFolder.path}bla2.m4a';
+      if (kDebugMode) {
+        print(filepath);
+      }
 
       await record.start(
         path: filepath,
-        encoder: AudioEncoder.aacLc, // by default
       );
     }
     return await record.isRecording();
   }
 
-  Future<void> stopRecording() async {
+  Future<String?> stopRecording() async {
     String? path = await record.stop();
-    print(path);
+    if (kDebugMode) {
+      print(path);
+    }
+    return path;
   }
 
   @override
