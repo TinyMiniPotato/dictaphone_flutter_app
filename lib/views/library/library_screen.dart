@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:dictaphone_app/providers/audio_player.dart';
+import 'package:dictaphone_app/utils/record.dart';
 import 'package:dictaphone_app/providers/recordings.dart';
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
@@ -41,8 +43,17 @@ class RecordingButton extends StatelessWidget {
     final String name = path.substring(path.lastIndexOf('/') + 1, path.length);
 
     return InkWell(
+      onTap: () {
+        Provider.of<AudioPlayerController>(context, listen: false)
+            .changePlayState();
+      },
       child: Row(
-        children: [Icon(Icons.play_arrow), Text(name)],
+        children: [
+          Provider.of<AudioPlayerController>(context).isPlaying
+              ? const Icon(Icons.stop)
+              : const Icon(Icons.play_arrow),
+          Text(name),
+        ],
       ),
     );
   }

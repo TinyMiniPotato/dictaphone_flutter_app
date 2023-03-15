@@ -1,3 +1,4 @@
+import 'package:dictaphone_app/providers/audio_player.dart';
 import 'package:dictaphone_app/providers/recordings.dart';
 import 'package:dictaphone_app/views/library/library_screen.dart';
 import 'package:dictaphone_app/views/record/record_screen.dart';
@@ -14,8 +15,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => RecordingsProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<RecordingsProvider>(
+          create: (_) => RecordingsProvider(),
+        ),
+        ChangeNotifierProvider<AudioPlayerController>(
+          create: (_) => AudioPlayerController(),
+        ),
+      ],
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(

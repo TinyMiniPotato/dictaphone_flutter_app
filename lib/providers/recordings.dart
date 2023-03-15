@@ -1,24 +1,19 @@
 import 'dart:io';
 
+import 'package:dictaphone_app/utils/record.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 class RecordingsProvider extends ChangeNotifier {
   bool isRecording = false;
 
-  set recording(bool val) {
-    isRecording = val;
-    notifyListeners();
-  }
-
-  bool isPlaying = false;
-
-  set playing(bool val) {
-    isPlaying = val;
+  void changeRecordState() {
+    isRecording = !isRecording;
     notifyListeners();
   }
 
   List<Record> recordsList = [];
+  Record? playingRecord;
 
   void get() async {
     List<FileSystemEntity> folders;
@@ -29,6 +24,8 @@ class RecordingsProvider extends ChangeNotifier {
     if (kDebugMode) {
       print(folders.length);
     }
+
+    recordsList = [];
     for (var f in folders) {
       recordsList.add(Record(f.path));
     }
@@ -58,10 +55,4 @@ class RecordingsProvider extends ChangeNotifier {
       rethrow;
     }
   }
-}
-
-class Record {
-  String path;
-
-  Record(this.path);
 }
