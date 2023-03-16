@@ -1,7 +1,8 @@
 import 'package:dictaphone_app/providers/audio_player.dart';
 import 'package:dictaphone_app/providers/recordings.dart';
-import 'package:dictaphone_app/views/library/library_screen.dart';
-import 'package:dictaphone_app/views/record/record_screen.dart';
+import 'package:dictaphone_app/views/navigation/library/library_screen.dart';
+import 'package:dictaphone_app/views/navigation/navigation_screen.dart';
+import 'package:dictaphone_app/views/navigation/record/record_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LibraryScreen(),
+        home: const NavigationScreen(),
       ),
     );
   }

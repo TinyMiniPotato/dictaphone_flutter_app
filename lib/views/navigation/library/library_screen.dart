@@ -12,21 +12,19 @@ class LibraryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Record> list = Provider.of<RecordingsProvider>(context).recordsList
+    List<MyRecord> list = Provider.of<RecordingsProvider>(context).recordsList
       ..sort((a, b) => a.path.compareTo(b.path));
     if (list.isEmpty) {
       Provider.of<RecordingsProvider>(context).get();
     }
 
-    return Scaffold(
-      body: ListView.builder(
-        itemCount: list.length,
-        itemBuilder: (BuildContext context, int i) {
-          return RecordingButton(
-            index: i,
-          );
-        },
-      ),
+    return ListView.builder(
+      itemCount: list.length,
+      itemBuilder: (BuildContext context, int i) {
+        return RecordingButton(
+          index: i,
+        );
+      },
     );
   }
 }
@@ -44,6 +42,22 @@ class RecordingButton extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        if (Provider.of<AudioPlayerController>(context, listen: false)
+            .isPlaying) {
+          Provider.of<AudioPlayerController>(context, listen: false).pause();
+        } else {
+          if (Provider.of<AudioPlayerController>(context, listen: false)
+                  .settedRecord !=
+              Provider.of<RecordingsProvider>(context, listen: false)
+                  .recordsList[index]) {
+            Provider.of<AudioPlayerController>(context, listen: false)
+                .setRecord(
+                    record:
+                        Provider.of<RecordingsProvider>(context, listen: false)
+                            .recordsList[index]);
+          }
+          Provider.of<AudioPlayerController>(context, listen: false).play();
+        }
         Provider.of<AudioPlayerController>(context, listen: false)
             .changePlayState();
       },

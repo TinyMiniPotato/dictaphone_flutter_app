@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:dictaphone_app/conf.dart';
 import 'package:dictaphone_app/utils/record.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
@@ -12,13 +13,14 @@ class RecordingsProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-  List<Record> recordsList = [];
-  Record? playingRecord;
+  List<MyRecord> recordsList = [];
+  MyRecord? playingRecord;
 
   void get() async {
     List<FileSystemEntity> folders;
     final Directory appDocDir = await getApplicationDocumentsDirectory();
-    final Directory appDocDirFolder = Directory('${appDocDir.path}/test/');
+    final Directory appDocDirFolder =
+        Directory('${appDocDir.path}/$recordFile/');
 
     folders = appDocDirFolder.listSync(recursive: true, followLinks: false);
     if (kDebugMode) {
@@ -27,12 +29,12 @@ class RecordingsProvider extends ChangeNotifier {
 
     recordsList = [];
     for (var f in folders) {
-      recordsList.add(Record(f.path));
+      recordsList.add(MyRecord(f.path));
     }
     notifyListeners();
   }
 
-  void add(Record record) {
+  void add(MyRecord record) {
     try {
       recordsList.add(record);
       notifyListeners();
@@ -44,7 +46,7 @@ class RecordingsProvider extends ChangeNotifier {
     }
   }
 
-  void remove(Record record) {
+  void remove(MyRecord record) {
     try {
       recordsList.remove(record);
       notifyListeners();

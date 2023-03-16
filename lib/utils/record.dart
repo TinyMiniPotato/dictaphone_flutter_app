@@ -1,5 +1,5 @@
-class Record {
+class MyRecord {
   String path;
 
-  Record(this.path);
+  MyRecord(this.path);
 }

@@ -3,11 +3,11 @@ import 'package:flutter/foundation.dart';
 import 'package:just_audio/just_audio.dart';
 
 class AudioPlayerController extends ChangeNotifier {
-  Record? settedRecord;
+  MyRecord? settedRecord;
   final AudioPlayer _audioPlayer = AudioPlayer();
   bool isPlaying = false;
 
-  Future<Duration?> setRecord({required Record record}) async {
+  Future<Duration?> setRecord({required MyRecord record}) async {
     final duration = await _audioPlayer.setFilePath(record.path);
     settedRecord = record;
     return duration;
